@@ -1,0 +1,9 @@
+*.db
+.htaccess
+session/
+cache/
+logs/
+tmp/
+proto/
+backup/
+just_in_case/
