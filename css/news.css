@@ -1,0 +1,29 @@
+*{
+margin-left: 0;
+position: relative;
+}
+
+p{
+font-size: 1.2em;
+font-family:Georgia, "New Century Schoolbook", "Nimbus Roman No9 L", serif;
+line-height: 1.3em;
+}
+
+h1{ margin:0 0 2px 0; }
+
+h2{
+color: #13567e;
+font-size:1em;
+margin-top:0;
+line-height:1em;
+font-weight:100;
+margin-bottom:1em;
+}
+
+img{
+padding:8px;
+margin-right:-8px;
+margin-left:-8px;
+background:#ffffff;
+max-width:100%;
+}
