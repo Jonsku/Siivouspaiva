@@ -551,8 +551,12 @@ text-align:center;
   text-align:center;
 }
 
-.partner li{
-  margin-bottom:20px;
+ul.partner li{
+  	display: block;
+	float: left;
+	margin-right: 10px;
+	margin-left: 10px;
+	margin-bottom: 40px;
 }
 
 div.bookmark{
