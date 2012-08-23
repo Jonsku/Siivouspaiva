@@ -275,12 +275,13 @@ function initializeMap() {
                 ////$.log("Bounds have changed");
                 var bounds = map.getBounds();
                 if(cities.cities === undefined){ //init
-                        refreshAllCities();
-                        refreshStands(bounds.getSouthWest().lat(), bounds.getNorthEast().lat(), bounds.getSouthWest().lng(), bounds.getNorthEast().lng(), getCitiesLastUpdate());
+                        refreshAllCities(function(){
+                            var bounds = map.getBounds();
+                            refreshStands(bounds.getSouthWest().lat(), bounds.getNorthEast().lat(), bounds.getSouthWest().lng(), bounds.getNorthEast().lng(), getCitiesLastUpdate());
+                        });
                         lastBounds = bounds;
                         lastZoom = map.getZoom();
                         return;
-                        //vBounds = bs;
                 }else if(!isInCurrentCitiesBounds(bounds)){
                         getCitiesInBound(bounds.getSouthWest().lat(), bounds.getNorthEast().lat(), bounds.getSouthWest().lng(), bounds.getNorthEast().lng() );
                 }else{
@@ -290,11 +291,13 @@ function initializeMap() {
         });
         
          google.maps.event.addListener(map, 'dragend', function() {
+            //$.log("drag ended");
             loadStandsFromDb();
          });
         
         google.maps.event.addListener(map, 'zoom_changed', function() {
                 if(lastZoom < map.getZoom() && map.getZoom()>zoomBoundary){
+                        $.log("zoom changed");
                         toggleStandsMarkers(true);
                         loadStandsFromDb();
                 }else if(lastZoom > map.getZoom() && map.getZoom()<=zoomBoundary){
@@ -324,7 +327,7 @@ function toggleStandsMarkers(show){
 function loadStandsFromDb(){
      var bounds = map.getBounds();
     if(map.getZoom()>zoomBoundary){
-                        //extrac only the bounds that needs refreshing
+                        //extract only the bounds that needs refreshing
                         //var unionBounds = lastBounds.union(bounds);
                         if(lastBounds.intersects(bounds) && !(lastBounds.contains(bounds.getNorthEast()) && lastBounds.contains(bounds.getSouthWest()))){ //chech if intersect and is not completely contained
                                 //the intersecting rectangle
@@ -334,12 +337,14 @@ function loadStandsFromDb(){
                                 var west  = Math.max(lastBounds.getSouthWest().lng(), bounds.getSouthWest().lng());
                                 
                                 if(north == lastBounds.getNorthEast().lat()){ //there is a rectangle North
+                                        $.log("rect1");
                                         refreshStands(north,  bounds.getNorthEast().lat(), Math.min(bounds.getSouthWest().lng(), lastBounds.getSouthWest().lng()), Math.max(bounds.getNorthEast().lng(), lastBounds.getNorthEast().lng()));
                                 }else{ //there is rectangle South
+                                                                        $.log("rect1");
                                         refreshStands(bounds.getSouthWest().lat(), south, Math.min(bounds.getSouthWest().lng(), lastBounds.getSouthWest().lng()), Math.max(bounds.getNorthEast().lng(), lastBounds.getNorthEast().lng()));
                                 }
                                 
-                                if(east == lastBounds.getNorthEast().lng()){ //there is a rectangle east
+                                if(east == lastBounds.getNorthEast().lng()){ //there is a rectangle east                       
                                         refreshStands(lastBounds.getSouthWest().lat(), lastBounds.getNorthEast().lat(), east, bounds.getNorthEast().lng());
                                 }else{ //there is rectangle West
                                         refreshStands(lastBounds.getSouthWest().lat(), lastBounds.getNorthEast().lat(), bounds.getSouthWest().lng(), west);
@@ -352,7 +357,7 @@ function loadStandsFromDb(){
 }
 
 //get data about cities in bounds
-function getCitiesInBound(um, uM, vm, vM){
+function getCitiesInBound(um, uM, vm, vM, callback){
         var data = {
                 um: urlencode(um),
                 uM: urlencode(uM),
@@ -371,14 +376,17 @@ function getCitiesInBound(um, uM, vm, vM){
                     alert("Error:"+data.error);
                 }else{
                     updateCities(data);
+                    if(callback){
+                        callback();
+                    }
                 }
             },
             dataType: "json"
         });
 }
 
-function refreshAllCities(){
-        getCitiesInBound(-90, 90, -180, 180);
+function refreshAllCities(callback){
+        getCitiesInBound(-90, 90, -180, 180, callback);
 }
 
 function refreshStands(um, uM, vm, vM, t){
@@ -541,13 +549,13 @@ function tagsCodeToString(tagsCode){
 
 
 function updateCities(data){
+    //$.log("updateCities");
     cities.current = [];
     if(cities.cities === undefined){
         cities.cities = [];
     }
     for(var i in data){
         var p = new google.maps.LatLng( (Number(data[i].u_min)+Number(data[i].u_max))/2.0, (Number(data[i].v_min)+Number(data[i].v_max))/2.0);
-        ////$.debug(p);
         if(cities.cities[data[i].city] === undefined){
             cities.cities[data[i].city] = new Object;
             cities.cities[data[i].city].name = data[i].city;
@@ -602,9 +610,11 @@ function setCurrentCityToBounds(bounds){
     return;
 }
 
-//get the city which contains the point
+/*
+Get the city which contains the point.
+Returns undefined is none is found.
+*/
 function getCityForPoint(p){
-    ////$.debug("getCityForPoint: "+p.lat()+", "+p.lng());
     if(cities.cities === undefined){
         return undefined;
     }
@@ -635,8 +645,12 @@ function removeStand(id){
 
 
 
-/* Show loaded stands */
+/*
+Add loaded stands to the views or update existing stands data.
+Returns an array containing all the stands added/updated.
+*/
 function updateStands(data){
+    //$.log("updateStands");
     var city = undefined;
     var newlyLoaded = new Array();
     for(var i in data){
@@ -688,20 +702,22 @@ function updateStands(data){
             city = getCityForPoint(p);
         }
         
-        if(city === undefined){
-            continue;
-        }else if(city.updated < Number(data[i].modified)){
+        //update city if needed
+        if(city != undefined && city.updated < Number(data[i].modified)){
             city.updated = Number(data[i].modified);
         }
-        loadedStands[data[i].id].data.city = city.name;
         
+        if(city != undefined){
+            loadedStands[data[i].id].data.city = city.name;
+        }
+        
+        //Add to the list view
+        addToListView(loadedStands[data[i].id]);
         //hide/show based on filters
         isFiltered(loadedStands[data[i].id]);
-        //if not filtered also add to the list view
-        //if(loadedStands[data[i].id].marker.getVisible()){
-        addToListView(loadedStands[data[i].id], city);
+        
+        
         newlyLoaded.push(loadedStands[data[i].id]);
-        //}
     }
     return newlyLoaded;
 }
@@ -862,7 +878,7 @@ if(dateNow.getFullYear() === siivousDate.getFullYear() && dateNow.getMonth() ===
 
 
 //manage the list view
-function addToListView(stand, city){
+function addToListView(stand){
     //$.log("addToListView", stand);
     var listTable = $("#stands_list");
     if( listTable.find("#listStand_"+stand.data.id).length > 0 ){
@@ -876,12 +892,16 @@ function addToListView(stand, city){
         stand.bookmark(true);
         return false;
     });
+    
+    //Hide/show based on filters 
     stand.addListener("filter", function(stand){
             $("#listStand_"+stand.data.id).hide();
     });
     stand.addListener("unfilter", function(stand){
             $("#listStand_"+stand.data.id).show();
     });
+    
+    //Bookmark/unmark callbacks
     stand.addListener("bookmark", function(stand){
         $("#listStand_"+stand.data.id+" a.bookmark").off('click');
         $("#listStand_"+stand.data.id+" a.bookmark").text(stringsL10N["Poista suosikeistasi"]);
@@ -901,6 +921,7 @@ function addToListView(stand, city){
         });
     });
     
+    //Show the stand on the map view
      $("#listStand_"+stand.data.id+" .showOnMap").click(function(){
         //1) Swicth to map
         $(".views.nav-tabs a:first").click();
@@ -910,10 +931,6 @@ function addToListView(stand, city){
      });
     
     $("#stands_list").trigger("update");
-}
-
-function listViewStandClick(standId){
-    
 }
 
 //views tabs

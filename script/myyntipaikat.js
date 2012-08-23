@@ -4,8 +4,11 @@ var special = false;
 
 $("#create-recycle-btn, #create-stand-btn").hide();
 
-createHoursMinutesSelect();
-initializeMap();
+//execute when DOM is ready
+$(function() {
+    createHoursMinutesSelect();
+    initializeMap();
+});
 
 /* ------------------------- */
 /* ------------------------- */
