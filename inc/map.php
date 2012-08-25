@@ -63,7 +63,7 @@
                             <li style="position: relative;"><label><input type="checkbox" class="tag-filter-toggle inline" value="r" checked="yes"/> <?php s(); ?>Kierrätyspisteitä<?php e(); ?> <i class="recycle-tag"></i></label></li>
                         </ul>
                 </div>
-                <button class="btn-green show-all"><?php s(); ?>Valitse kaikki<?php e(); ?></button><button class="btn-green deselect-all"><?php s(); ?>Poista valinnat<?php e(); ?></button>
+                <button class="btn-blue show-all"><?php s(); ?>Valitse kaikki<?php e(); ?></button><button class="btn-blue deselect-all"><?php s(); ?>Poista valinnat<?php e(); ?></button>
         </div>       
      </div>
 </div>
@@ -85,11 +85,11 @@
                                 <thead> 
                                 <tr> 
                                     <th><?php s(); ?>Nimi ja osoite<?php e(); ?> <i class="icon-chevron-down icon-white down"></i><i class="icon-chevron-up icon-white up"></i>&nbsp;&nbsp;</th>
-                                    <th><?php s('en_EN'); ?>Opens at<?php e(); ?> <i class="icon-chevron-down icon-white down"></i><i class="icon-chevron-up icon-white up"></i>&nbsp;&nbsp;</th>
-                                    <th><?php s('en_EN'); ?>Closes at<?php e(); ?> <i class="icon-chevron-down icon-white down"></i><i class="icon-chevron-up icon-white up"></i>&nbsp;&nbsp;</th> 
-                                    <th><?php s(); ?>Postinumero<?php e(); ?> <i class="icon-chevron-down icon-white down"></i><i class="icon-chevron-up icon-white up"></i>&nbsp;&nbsp;</th> 
+                                    <th class="narrow"><?php s('en_EN'); ?>Opens at<?php e(); ?> <i class="icon-chevron-down icon-white down"></i><i class="icon-chevron-up icon-white up"></i>&nbsp;&nbsp;</th>
+                                    <th class="narrow"><?php s('en_EN'); ?>Closes at<?php e(); ?> <i class="icon-chevron-down icon-white down"></i><i class="icon-chevron-up icon-white up"></i>&nbsp;&nbsp;</th> 
+                                    <th class="semi"><?php s(); ?>Postinumero<?php e(); ?> <i class="icon-chevron-down icon-white down"></i><i class="icon-chevron-up icon-white up"></i>&nbsp;&nbsp;</th> 
                                     <th><?php s(); ?>Kuvaus<?php e(); ?></th>
-                                    <th></th>
+                                    <th class="narrow"></th>
                                 </tr> 
                                 </thead> 
                                 <tbody> 
