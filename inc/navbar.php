@@ -47,13 +47,13 @@
                   }
                  ?>
                 <!-- Language selector -->
-                <!--
+                
                 <ul class="nav pull-right" data-no-collapse="true">
                   <li class="dropdown">
                     <a href="<?php echo $config['paths']['base_url']."/".($_SESSION['locale'] == "fi_FI" ? "en_EN" : "fi_FI")."/".$navigation[$page]; ?>"><?php echo $_SESSION['locale'] == "fi_FI" ? $localeToLanguage['en_EN'] : $localeToLanguage['fi_FI']; ?></a>
                   </li>
                 </ul>
-                -->
+                
                 <!--
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $localeToLanguage[$_SESSION['locale']]; ?><b class="caret"></b></a>
                    

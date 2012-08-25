@@ -21,7 +21,9 @@ try{
     echo "'Db error: ".$e->getMessage()."'";
     $db = NULL;
     exit();
-}   
+}
+//string localization
+require_once($_SERVER['DOCUMENT_ROOT']."/l10n.php");
 ?>
 <!DOCTYPE html>
 <html lang="fi">
@@ -61,7 +63,7 @@ try{
         </tbody>
       </table>
       <?php }else{ ?>
-        <h1>Sinulla ei ole vielä myyntipaikkoja suosikeissasi.</h1>
+        <h1><?php s(); ?>Sinulla ei ole vielä myyntipaikkoja suosikeissasi.<?php e(); ?></h1>
       <?php } ?>
   </body>
 </html>

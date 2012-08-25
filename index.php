@@ -64,27 +64,27 @@ include($_SERVER['DOCUMENT_ROOT']."/inc/header.php");
                   </div>
                   <!-- Contact form -->
                   <form id="message-form" class="form-inline my-well" action="/mail/" method="post">
-                      <h1>Ota yhteyttä</h1>
+                      <h1><?php s(); ?>Ota yhteyttä<?php e(); ?></h1>
                       <fieldset>
                           <div class="control-group subject">
-                              <label for="subject">aihe:</label>
+                              <label for="subject"><?php s(); ?>aihe<?php e(); ?>:</label>
                               <div class="controls">
                                   <input type="text" name="subject" id="subject"/>
                               </div>
                           </div>
                           <div class="control-group email">
-                              <label for="email">sähköpostiosoitteesi:</label>
+                              <label for="email"><?php s(); ?>sähköpostiosoitteesi<?php e(); ?>:</label>
                               <div class="controls">
                                   <input type="text" name="email" id="email"/>
                               </div>
                           </div>
                           <div class="control-group message">
-                              <label for="message">viesti:</label>
+                              <label for="message"><?php s(); ?>viesti<?php e(); ?>:</label>
                               <div class="controls">
                                   <textarea name="message" id="message"></textarea>
                               </div>
                           </div>
-                          <button type="submit" class="btn-red">Lähetä</button>
+                          <button type="submit" class="btn-red"><?php s(); ?>Lähetä<?php e(); ?></button>
                       </fieldset>
                   </form>
                   
@@ -102,7 +102,10 @@ include($_SERVER['DOCUMENT_ROOT']."/inc/header.php");
         
     </div>
     <script type="text/javascript">
-    
+    stringsL10N = new Array();
+    stringsL10N["You must enter an email address."] = "<?php s('en_EN'); ?>You must enter an email address.<?php e(); ?>";
+    stringsL10N["You must enter a message."] = "<?php s('en_EN'); ?>You must enter a message.<?php e(); ?>";
+    stringsL10N["Kiitos! Olemme sinuun yhteydessä pian."] = "<?php s(); ?>Kiitos! Olemme sinuun yhteydessä pian.<?php e(); ?>";
     $.ajax({
             type: 'POST',
             url: '<?php echo $config['paths']['base_url']; ?>/data.php?query=news_list',
@@ -141,19 +144,19 @@ include($_SERVER['DOCUMENT_ROOT']."/inc/header.php");
         $('#message-form input[name="email"]').val("");
         $('#message-form input[name="subject"]').val("");
         $('#message-form textarea').val("");
-        alert("Kiitos! Olemme sinuun yhteydessä pian.")
+        alert(stringsL10N["Kiitos! Olemme sinuun yhteydessä pian."])
     }
     
     $('#message-form button').click(function(){
         $('#message-form .error').removeClass("error");
         /* Validate */
         if($('#message-form input[name="email"]').val().replace(" ","").length == 0){
-            alert("You must enter an email address.");
+            alert(stringsL10N["You must enter an email address."]);
             $('.control-group.email').toggleClass("error");
             return false;
         }
         if($('#message-form textarea').val().replace(" ","").length == 0){
-            alert("You must enter a message.");
+            alert(stringsL10N["You must enter a message."]);
             $('.control-group.textarea').toggleClass("error");
             return false;
         }
