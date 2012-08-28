@@ -58,13 +58,17 @@ if( !( isset($_SESSION['admin']) && $_SESSION['admin'] === 1 ) && loadCache()){
          //log/debug
          (function($) {
             $.each(['log','warn'], function(i,fn) {
+
                 $[fn] = function() {
+/*
                     if (!window.console) return;
                     var p = [], a = arguments;
                     for (var i=0; i<a.length; i++)
                         p.push(a[i]) && (i+1<a.length) && p.push(' ');
                     Function.prototype.bind.call(console[fn], console)
                         .apply(this, p);
+*/
+return true;
                 };
                 
                 $.fn[fn] = function() {
@@ -73,11 +77,15 @@ if( !( isset($_SESSION['admin']) && $_SESSION['admin'] === 1 ) && loadCache()){
                     $[fn].apply(this, p);
                     return this;
                 };
+			return true;
             });
             $.assert = function() {
+				/*
                 window.console
                     && Function.prototype.bind.call(console.assert, console)
                        .apply(console, arguments);
+*/
+			return true
             };
         })(jQuery);
          
