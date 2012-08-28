@@ -40,8 +40,8 @@ include($_SERVER['DOCUMENT_ROOT']."/inc/header.php");
                 </div>
                 <div class="row">
                   <div class="span8">
-                    <p><?php s(); ?>Vihdoinkin voit päästä helpolla eroon kaikista nurkkiin kertyneistä tavaroista, antaa niille uuden elämän ja vielä ansaita siitä ilosta!</p>
-                    <p>Voit selata myyntipaikkoja kartalta ja lisätä sinne omasi Facebook-tunnuksillasi. Tutustu myös kohtiin kysyttyä sekä siisteys ja kierrätys ennen puotisi avaamista.<?php e(); ?></p>
+                    <p><?php s(); ?>Vihdoinkin voit päästä helpolla eroon kaikista nurkkiin kertyneistä tavaroista, antaa niille uuden elämän ja vielä ansaita siitä ilosta!<?php e(); ?></p>
+                    <p><?php s(); ?>Voit selata myyntipaikkoja kartalta ja lisätä sinne omasi Facebook-tunnuksillasi. Tutustu myös kohtiin kysyttyä sekä siisteys ja kierrätys ennen puotisi avaamista.<?php e(); ?></p>
                   </div>
                 </div>
 				<div class="news row">
