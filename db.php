@@ -831,9 +831,8 @@ function mail_utf8($to, $subject = '(No subject)', $message = '', $header = '') 
   mail($to, '=?UTF-8?B?'.base64_encode($subject).'?=', $message, $header_ . $header);
 }*/
 
-function message(){
-    
-    /* Validate */
+function message(){ 
+	/* Validate */
     $validate = checkRequired(array("subject" => false, "message" => true, "email" => true));
     if($validate != 1){
         echo json_encode(array("error"=>$validate));
@@ -845,7 +844,7 @@ function message(){
     $message = "Reply to ".$from."\r\n\r\n".$message;
     $subject = trim($_POST["subject"]);
     
-    $to      = 'siivouspaiva@siivouspaiva.com';
+    $to      = 'siivouspaiva@siivouspaiva.com'. "\r\n";
     $headers = 'From: siivouspaiva@siivouspaiva.com' . "\r\n" .
         'Reply-To: '.$from."\r\n" .
         'X-Mailer: PHP/' . phpversion()."\r\n";
@@ -853,8 +852,12 @@ function message(){
     $headers .= 'Content-type: text/plain; charset=UTF-8'."\r\n";
     $headers .= 'Content-Transfer-Encoding: 8bit'."\r\n";
     $headers .= "\r\n";
-    
-    mail($to, "=?utf-8?b?".base64_encode($subject)."?=", $message, $headers);
+/*
+Mail causes a 500 error for an inexistent 'to' address. Don't know the cause of the problem but the solution is to put the following parameter in the mail() command:
+
+"-fme@mydomain.com"
+*/
+    mail($to, "=?utf-8?b?".base64_encode($subject)."?=", $message, $headers, "-fme@siivouspaiva.com");
     echo json_encode(array("success"=>"Message sent."));
 }
 
