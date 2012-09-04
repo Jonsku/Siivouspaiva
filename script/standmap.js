@@ -316,7 +316,8 @@ function initializeMap() {
 function toggleStandsMarkers(show){
     for(var i in loadedStands){
         loadedStands[i].marker.setVisible( show /*&& isFiltered(loadedStands[i]) */);
-        isFiltered(loadedStands[i]);
+		if(show)
+        	isFiltered(loadedStands[i]);
     }
     for(var i in cities.cities){
         cities.cities[i].marker.setVisible(!show);
